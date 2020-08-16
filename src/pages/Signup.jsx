@@ -6,11 +6,7 @@ export default function Signup(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null)
-    // const [signup, setSignup] = useState({
-    //     error: null,
-    //     email: '',
-    //     password: ''
-    // })
+
 
     const handleChange = (e) => {
         setEmail({
