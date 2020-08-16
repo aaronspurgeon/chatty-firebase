@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { signup } from '../helpers/auth';
+import { signup, signInWithGoogle, signInWithGitHub } from '../helpers/auth';
 
 export default function Signup(props) {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [data, setData] = useState({
+        username: '',
+        password: ''
+    })
     const [error, setError] = useState(null)
 
 
     const handleChange = (e) => {
-        setEmail({
+        setData({
+            ...data,
             [e.target.name]: e.target.value
         })
     }
 
-    async function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setError({ error: '' })
+        signup(data.email, data.password);
+        // } catch (error) {
+        //     setError({ error: error.message })
+        // }
+    }
+
+    async function googleSignIn() {
         try {
-            await signup(email, password);
+            await signInWithGoogle();
         } catch (error) {
             setError({ error: error.message })
         }
@@ -33,15 +43,18 @@ export default function Signup(props) {
                 </h1>
                 <p>Fill in the form below to create an account.</p>
                 <div>
-                    <input placeholder="Email" name="email" type="email" onChange={handleChange} value={email}></input>
+                    <input placeholder="Email" name="email" type="email" onChange={handleChange} value={data.email}></input>
                 </div>
                 <div>
-                    <input placeholder="Password" name="password" onChange={handleChange} value={password} type="password"></input>
+                    <input placeholder="Password" name="password" onChange={handleChange} value={data.password} type="password"></input>
                 </div>
                 <div>
                     {error ? <p>{error}</p> : null}
                     <button type="submit">Sign up</button>
                 </div>
+                <button className="btn btn-danger mr-2" type="button" onClick={googleSignIn}>
+                    Sign up with Google
+          </button>
                 <hr></hr>
                 <p>Already have an account? <Link to="/login">Login</Link></p>
             </form>
