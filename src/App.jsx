@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   Route,
   BrowserRouter as Router,
@@ -39,11 +39,25 @@ const PublicRoute = ({ component: Component, authenticated, ...rest }) => {
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuth, setIsAuth] = useState(false)
+
+  useEffect(() => {
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsAuth(true)
+        setIsLoading(false)
+      } else {
+        setIsLoading(false)
+        setIsAuth(false)
+      }
+    })
+  }, [])
   return isLoading === true ? <h1>Loading...</h1> : (
     <Router>
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route path='/chat' authenticated={isAuth} component={Chat} />
+        <PrivateRoute path='/chat' authenticated={isAuth} component={Chat} />
+        <PublicRoute path='/signup' authenticated={isAuth} component={Signup} />
+        <PublicRoute path='/login' authenticated={isAuth} component={Login} />
       </Switch>
     </Router>
   )
