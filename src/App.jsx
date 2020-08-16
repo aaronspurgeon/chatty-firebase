@@ -51,6 +51,8 @@ function App() {
       }
     })
   }, [])
+
+
   return isLoading === true ? <h1>Loading...</h1> : (
     <Router>
       <Switch>
